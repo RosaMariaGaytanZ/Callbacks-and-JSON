@@ -10,14 +10,14 @@ let biblioteca = {
 function leerDatos(callback) {
     setTimeout(() => {
         // Aquí simulas leer el JSON con un retraso de 1 segundo
-        callback(biblioteca);
+        callback({...biblioteca});
     }, 1000);
 }
 
 // Función para mostrar todos los libros en consola
 function mostrarLibros() {
     leerDatos((datos) => {
-        console.log("Inventario de libros:");
+        console.log("\n--- Inventario de libros ---");
         datos.libros.forEach((libro, index) => {
             console.log(`${index + 1}. ${libro.titulo} - ${libro.autor} (${libro.disponible ? 'Disponible' : 'Prestado'})`);
         });
@@ -25,19 +25,29 @@ function mostrarLibros() {
 }
 
 // Función para agregar un nuevo libro
-function agregarLibro(titulo, autor, genero, disponible) {
+function agregarLibro(titulo, autor, genero, disponible, callback) {
     const nuevoLibro = { titulo, autor, genero, disponible };
-    // Aquí falta la simulación de escribir el libro en el "archivo" (es decir, agregarlo al objeto)
+    console.log(`... Intentando agregar: "${titulo}" ...`);
     setTimeout(() => {
-        // Pista: deberías agregar el nuevo libro a `biblioteca.libros`
+        biblioteca.libros.push(nuevoLibro);
+        console.log(`[OK] Libro "${titulo}" guardado con éxito.`);
+        if (callback) callback();
+       
     }, 1000);
 }
 
 // Función para cambiar la disponibilidad de un libro
 function actualizarDisponibilidad(titulo, nuevoEstado) {
-    // Simula un retraso antes de actualizar la disponibilidad
+    console.log(`... Actualizando estado de: "${titulo}" ...`);
     setTimeout(() => {
-        // Pista: busca el libro por título y cambia la propiedad 'disponible' a nuevoEstado
+        const libroEncontrado = biblioteca.libros.find(libro => libro.titulo === titulo);
+        
+        if (libroEncontrado) {
+            libroEncontrado.disponible = nuevoEstado;
+            console.log(`[OK] El estado de "${titulo}" se actualizó a: ${nuevoEstado ? 'Disponible' : 'Prestado'}.`);
+        } else {
+            console.log(`[Error] No se encontró el libro "${titulo}".`);
+        }
     }, 1000);
 }
 
